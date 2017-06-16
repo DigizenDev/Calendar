@@ -33,6 +33,7 @@ public class MonthView extends View {
 
     private static final int NUM_COLUMNS = 7;
     private static final int NUM_ROWS = 6;
+    private static final int NOT_SELECTED_DAY = -1;//都不选中
     private Paint mPaint;
     private Paint mLunarPaint;
     private int mNormalDayColor;
@@ -175,11 +176,16 @@ public class MonthView extends View {
         mCurrLunarMonth = lunar.lunarMonth;
         mCurrLunarDay = lunar.lunarDay;
         mCurrLunarMonthLeap = lunar.isLeap;
+
+        /*
         if (mSelYear == mCurrYear && mSelMonth == mCurrMonth) {
             setSelectYearMonth(mSelYear, mSelMonth, mCurrDay);
         } else {
             setSelectYearMonth(mSelYear, mSelMonth, 1);
         }
+        */
+        //TODO 不默认选中当天
+        setSelectYearMonth(mSelYear, mSelMonth, NOT_SELECTED_DAY);
     }
 
     @Override
@@ -259,31 +265,35 @@ public class MonthView extends View {
             mDaysText[row][col] = day + 1;
             int startX = (int) (mColumnSize * col + (mColumnSize - mPaint.measureText(dayString)) / 2);
             int startY = (int) (mRowSize * row + mRowSize / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
-            if (dayString.equals(String.valueOf(mSelDay))) {
-                int startRecX = mColumnSize * col;
-                int startRecY = mRowSize * row;
-                int endRecX = startRecX + mColumnSize;
-                int endRecY = startRecY + mRowSize;
-                if (mSelYear == mCurrYear && mCurrMonth == mSelMonth && day + 1 == mCurrDay) {
-                    mPaint.setColor(mSelectBGTodayColor);
-                } else {
-                    mPaint.setColor(mSelectBGColor);
+            if (dayString.equals(String.valueOf(getSelectDay()))) {
+                //TODO 如果需要显示选中 才画圈
+                Log.d("---------->", mSelDay + "--" + getSelectDay());
+                if (mSelDay != NOT_SELECTED_DAY) {
+                    int startRecX = mColumnSize * col;
+                    int startRecY = mRowSize * row;
+                    int endRecX = startRecX + mColumnSize;
+                    int endRecY = startRecY + mRowSize;
+                    if (mSelYear == mCurrYear && mCurrMonth == mSelMonth && day + 1 == mCurrDay) {
+                        mPaint.setColor(mSelectBGTodayColor);
+                    } else {
+                        mPaint.setColor(mSelectBGColor);
+                    }
+                    //TODO 空心
+                    Paint circle = new Paint(mPaint);
+                    circle.setStyle(Paint.Style.STROKE);
+                    circle.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.g2u_day_stroke_width));
+                    int lunarMargin = getResources().getDimensionPixelSize(R.dimen.g2u_lunar_margin);
+                    int circleOffset = getResources().getDimensionPixelSize(R.dimen.g2u_circle_offset);
+                    canvas.drawCircle((startRecX + endRecX) / 2, (startRecY + endRecY) / 2 + lunarMargin + circleOffset, mSelectCircleSize, circle);
                 }
-                //空心
-                Paint circle = new Paint(mPaint);
-                circle.setStyle(Paint.Style.STROKE);
-                circle.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.g2u_day_stroke_width));
-                int lunarMargin = getResources().getDimensionPixelSize(R.dimen.g2u_lunar_margin);
-                int circleOffset = getResources().getDimensionPixelSize(R.dimen.g2u_circle_offset);
-                canvas.drawCircle((startRecX + endRecX) / 2, (startRecY + endRecY) / 2 + lunarMargin + circleOffset, mSelectCircleSize, circle);
                 mWeekRow = row + 1;
             }
             drawHintCircle(row, col, day + 1, canvas);
-            if (dayString.equals(String.valueOf(mSelDay))) {
+            if (dayString.equals(String.valueOf(getSelectDay()))) {
                 selectedPoint[0] = row;
                 selectedPoint[1] = col;
                 mPaint.setColor(mSelectDayColor);
-            } else if (dayString.equals(String.valueOf(mCurrDay)) && mCurrDay != mSelDay && mCurrMonth == mSelMonth && mCurrYear == mSelYear) {
+            } else if (dayString.equals(String.valueOf(mCurrDay)) && mCurrDay != getSelectDay() && mCurrMonth == mSelMonth && mCurrYear == mSelYear) {
                 mPaint.setColor(mCurrentDayColor);
             } else {
                 mPaint.setColor(mNormalDayColor);
@@ -398,7 +408,7 @@ public class MonthView extends View {
 
                 boolean isDrawLunar = mIsShowLast;
                 //TODO 如果是这个月的
-                Log.d("--------->", "公历 " + solar.solarYear + "-" + solar.solarMonth + "-" + solar.solarDay + " , 农历 " + lunar.lunarYear + "-" + lunar.lunarMonth + "-" + day + "-" + lunar.isLeap + " , 当前选择公历月-" + (mSelMonth + 1) + " , 当前年闰月-" + leapMonth + " " + days + "天");
+                //Log.d("--------->", "公历 " + solar.solarYear + "-" + solar.solarMonth + "-" + solar.solarDay + " , 农历 " + lunar.lunarYear + "-" + lunar.lunarMonth + "-" + day + "-" + lunar.isLeap + " , 当前选择公历月-" + (mSelMonth + 1) + " , 当前年闰月-" + leapMonth + " " + days + "天");
                 if (solar.solarMonth == mSelMonth + 1) {
                     mLunarPaint.setColor(mLunarTextColor);
                     if (!isDrawLunar) {
@@ -422,7 +432,7 @@ public class MonthView extends View {
 
                     //TODO 下划线
                     //Log.d("-------->", lunar.lunarYear + "-" + lunar.lunarMonth + "-" + day + "," + mCurrLunarYear + "-" + (mCurrLunarMonth + 1) + "-" + (mCurrLunarDay+1));
-                    if (mSelDay != mCurrDay && lunar.lunarYear == mCurrLunarYear && lunar.lunarMonth == mCurrLunarMonth + 1 && day == mCurrLunarDay + 1) {
+                    if (mSelDay != mCurrDay && solar.solarYear == mCurrYear && solar.solarMonth == mCurrMonth + 1 && solar.solarDay == mCurrDay) {
                         Paint underlinePaint = new Paint();
                         underlinePaint.setColor(mSelectBGColor);
                         int underlineMargin = getResources().getDimensionPixelSize(R.dimen.g2u_current_day_underline);
@@ -544,6 +554,7 @@ public class MonthView extends View {
         mSelDay = day;
     }
 
+
     private void doClickAction(int x, int y) {
         if (y > getHeight())
             return;
@@ -578,6 +589,7 @@ public class MonthView extends View {
                     clickYear = mSelYear;
                     clickMonth = mSelMonth + 1;
                 }
+                //TODO 如果不显示上一月就不能点击
                 if (mDateClickListener != null && mIsShowLast) {
                     mDateClickListener.onClickNextMonth(clickYear, clickMonth, mDaysText[row][column]);
                 }
@@ -626,6 +638,14 @@ public class MonthView extends View {
      * @return
      */
     public int getSelectDay() {
+        return Math.max(this.mSelDay, 1);
+    }
+
+    /**
+     * 获取真实选择日
+     * @return
+     */
+    public int getRealSelectDay() {
         return this.mSelDay;
     }
 
@@ -687,6 +707,5 @@ public class MonthView extends View {
     public void setOnDateClickListener(OnMonthClickListener dateClickListener) {
         this.mDateClickListener = dateClickListener;
     }
-
 }
 

@@ -68,6 +68,7 @@ public class ScheduleFragment extends BaseFragment implements OnCalendarClickLis
         searchViewById(R.id.ibMainOk).setOnClickListener(this);
         initScheduleList();
         initBottomInputBar();
+
     }
 
     @Override

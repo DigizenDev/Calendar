@@ -22,7 +22,7 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
     private MonthAdapter mMonthAdapter;
     private OnCalendarClickListener mOnCalendarClickListener;
 
-    //<year,<month,<day,event>>
+    //<year,<month,<day,List<event>>
     private SparseArray<SparseArray<SparseArray<List<Event>>>> mEvents = new SparseArray<>();
 
     public MonthCalendarView(Context context) {
@@ -80,10 +80,12 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
         @Override
         public void onPageSelected(final int position) {
             MonthView monthView = mMonthAdapter.getViews().get(getCurrentItem());
+            int realSelectDay = monthView.getRealSelectDay();
+            //Log.d("----------------->",monthView.getSelectMonth()+" "+monthView.getRealSelectDay()+" "+realSelectDay);
             if (monthView != null) {
-                monthView.clickThisMonth(monthView.getSelectYear(), monthView.getSelectMonth(), monthView.getSelectDay());
+                monthView.clickThisMonth(monthView.getSelectYear(), monthView.getSelectMonth(), realSelectDay);
                 if (mOnCalendarClickListener != null) {
-                    mOnCalendarClickListener.onPageChange(monthView.getSelectYear(), monthView.getSelectMonth(), monthView.getSelectDay());
+                    mOnCalendarClickListener.onPageChange(monthView.getSelectYear(), monthView.getSelectMonth(), realSelectDay);
                 }
             } else {
                 MonthCalendarView.this.postDelayed(new Runnable() {
@@ -104,8 +106,12 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
      * 跳转到今天
      */
     public void setTodayToView() {
-        setCurrentItem(mMonthAdapter.getMonthCount() / 2, true);
-
+        setCurrentItem(mMonthAdapter.getMonthCount() / 2, false);
+        MonthView monthView = mMonthAdapter.getViews().get(mMonthAdapter.getMonthCount() / 2);
+        if (monthView != null) {
+            Calendar calendar = Calendar.getInstance();
+            monthView.clickThisMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+        }
     }
 
 

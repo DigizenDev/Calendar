@@ -41,16 +41,16 @@ public class MonthAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        if (mViews.get(position) == null) {
+        MonthView monthView = mViews.get(position);
+        if (monthView == null) {
             int date[] = getYearAndMonth(position);
-            MonthView monthView = new MonthView(mContext, mArray, date[0], date[1]);
+            monthView = new MonthView(mContext, mArray, date[0], date[1]);
             monthView.setId(position);
             monthView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
             monthView.invalidate();
             monthView.setOnDateClickListener(mMonthCalendarView);
             mViews.put(position, monthView);
         }
-        MonthView monthView = mViews.get(position);
         container.addView(monthView);
 
         //整年的事件
