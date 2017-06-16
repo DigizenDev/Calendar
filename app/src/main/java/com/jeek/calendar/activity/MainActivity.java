@@ -63,6 +63,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         tvTitleDay = searchViewById(R.id.tvTitleDay);
         tvTitle = searchViewById(R.id.tvTitle);
         rvMenuEventSetList = searchViewById(R.id.rvMenuEventSetList);
+        searchViewById(R.id.llMenuG2U).setOnClickListener(this);
         searchViewById(R.id.ivMainMenu).setOnClickListener(this);
         searchViewById(R.id.llMenuSchedule).setOnClickListener(this);
         searchViewById(R.id.llMenuNoCategory).setOnClickListener(this);
@@ -71,6 +72,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         initEventSetList();
         gotoScheduleFragment();
         initBroadcastReceiver();
+
+        searchViewById(R.id.llMenuG2U).performClick();
 
     }
 
@@ -151,6 +154,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.llMenuG2U:
+                startActivity(new Intent(this, G2UActivity.class));
+                break;
             case R.id.ivMainMenu:
                 dlMain.openDrawer(Gravity.START);
                 break;

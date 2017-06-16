@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="14dp"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/layout_calendar_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_calendar_today"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="30dp"
+                    android:text="今天" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:gravity="right"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:id="@+id/tv_calendar_title_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/icon_calendar_arrow_left"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="20dp" />
+
+                    <TextView
+                        android:id="@+id/tv_calendar_title_month"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="4dp"
+                        android:textColor="@color/g2u_title_month_text_color"
+                        android:textSize="15.4sp"
+                        tools:text="四月" />
+
+                    <TextView
+                        android:id="@+id/tv_calendar_title_year"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/g2u_title_day_text_color"
+                        tools:text="2017" />
+
+                    <TextView
+                        android:id="@+id/tv_calendar_title_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@mipmap/icon_calendar_arrow_right"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_calendar_title"
+                android:orientation="vertical">
+
+                <com.jeek.calendar.widget.calendar.WeekBarView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/week_bar_height"
+
+                    app:week_text_color="@color/g2u_week_text_color"
+                    app:week_text_size="11"
+                    app:weekend_text_color="@color/g2u_weekend_text_color" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/g2u_week_line" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:id="@+id/rlMonthCalendar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.jeek.calendar.widget.calendar.month.MonthCalendarView
+                            android:id="@+id/mcvCalendar"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/month_calendar_height"
+                            android:overScrollMode="never"
+                            app:auto_change_month_row="false"
+                            app:month_day_lunar_text_size="8"
+                            app:month_day_text_size="14"
+                            app:month_holiday_color="@color/g2u_day_text_color"
+                            app:month_last_or_next_month_text_color="@color/g2u_weekend_text_color"
+                            app:month_lunar_text_color="@color/g2u_day_text_color"
+                            app:month_normal_text_color="@color/g2u_day_text_color"
+                            app:month_selected_circle_color="@color/g2u_month_selected_circle_color"
+                            app:month_selected_text_color="@color/g2u_day_text_color"
+                            app:month_show_holiday_hint="false"
+                            app:month_show_last="true"
+                            app:month_show_lunar="true"
+                            app:month_show_task_hint="true"
+                            app:month_today_text_color="@color/g2u_day_text_color" />
+
+                    </RelativeLayout>
+
+                    <com.jeek.calendar.widget.calendar.week.WeekCalendarView
+                        android:id="@+id/wcvCalendar"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/week_calendar_height"
+                        android:background="@color/calendar_bg_color"
+                        android:overScrollMode="never"
+                        android:visibility="gone"
+                        app:week_day_text_size="@integer/calendar_text_size"
+                        app:week_holiday_color="@color/holiday_text_color"
+                        app:week_selected_circle_color="@color/select_circle_color"
+                        app:week_show_holiday_hint="true"
+                        app:week_show_lunar="true"
+                        app:week_show_task_hint="true"/>
+
+                </RelativeLayout></LinearLayout>
+        </RelativeLayout>
+
+</android.support.v7.widget.CardView>

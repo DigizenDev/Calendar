@@ -37,6 +37,37 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/llMenuG2U"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/menu_item_height"
+                    android:background="@drawable/menu_item_border"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/space_20dp"
+                        android:src="@mipmap/ic_menu_schedule"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/space_10dp"
+                        android:layout_weight="1"
+                        android:text="G2U"
+                        android:textColor="@color/colorWrite"
+                        android:textSize="@dimen/text_size_18sp"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/space_10dp"
+                        android:src="@mipmap/ic_menu_go"/>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/llMenuSchedule"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/menu_item_height"

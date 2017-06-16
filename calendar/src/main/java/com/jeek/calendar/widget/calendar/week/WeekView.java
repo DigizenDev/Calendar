@@ -15,9 +15,11 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.jeek.calendar.library.R;
-import com.jimmy.common.data.ScheduleDao;
 import com.jeek.calendar.widget.calendar.CalendarUtils;
 import com.jeek.calendar.widget.calendar.LunarCalendarUtils;
+import com.jeek.calendar.widget.calendar.bean.Lunar;
+import com.jeek.calendar.widget.calendar.bean.Solar;
+import com.jimmy.common.data.ScheduleDao;
 
 import org.joda.time.DateTime;
 
@@ -258,7 +260,7 @@ public class WeekView extends View {
      */
     private void drawLunarText(Canvas canvas, int selected) {
         if (mIsShowLunar) {
-            LunarCalendarUtils.Lunar lunar = LunarCalendarUtils.solarToLunar(new LunarCalendarUtils.Solar(mStartDate.getYear(), mStartDate.getMonthOfYear(), mStartDate.getDayOfMonth()));
+            Lunar lunar = LunarCalendarUtils.solarToLunar(new Solar(mStartDate.getYear(), mStartDate.getMonthOfYear(), mStartDate.getDayOfMonth()));
             int leapMonth = LunarCalendarUtils.leapMonth(lunar.lunarYear);
             int days = LunarCalendarUtils.daysInMonth(lunar.lunarYear, lunar.lunarMonth, lunar.isLeap);
             int day = lunar.lunarDay;

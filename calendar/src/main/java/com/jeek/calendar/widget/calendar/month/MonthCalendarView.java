@@ -8,8 +8,11 @@ import android.util.SparseArray;
 
 import com.jeek.calendar.library.R;
 import com.jeek.calendar.widget.calendar.OnCalendarClickListener;
+import com.jeek.calendar.widget.calendar.schedule.Event;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Jimmy on 2016/10/6 0006.
@@ -18,6 +21,9 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
 
     private MonthAdapter mMonthAdapter;
     private OnCalendarClickListener mOnCalendarClickListener;
+
+    //<year,<month,<day,event>>
+    private SparseArray<SparseArray<SparseArray<List<Event>>>> mEvents = new SparseArray<>();
 
     public MonthCalendarView(Context context) {
         this(context, null);
@@ -99,11 +105,32 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
      */
     public void setTodayToView() {
         setCurrentItem(mMonthAdapter.getMonthCount() / 2, true);
-        MonthView monthView = mMonthAdapter.getViews().get(mMonthAdapter.getMonthCount() / 2);
-        if (monthView != null) {
-            Calendar calendar = Calendar.getInstance();
-            monthView.clickThisMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+
+    }
+
+
+    public void addEvent(Event event) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(event.getDate());
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        SparseArray<SparseArray<List<Event>>> yearEvents = mEvents.get(year);
+        if (yearEvents == null) {
+            yearEvents = new SparseArray<>();
+            mEvents.put(year, yearEvents);
         }
+        SparseArray<List<Event>> monthEvents = yearEvents.get(month);
+        if (monthEvents == null) {
+            monthEvents = new SparseArray<>();
+            yearEvents.put(month, monthEvents);
+        }
+        List<Event> dayEvents = monthEvents.get(day);
+        if (dayEvents == null) {
+            dayEvents = new ArrayList<>();
+            monthEvents.put(day, dayEvents);
+        }
+        dayEvents.add(event);
     }
 
     /**
@@ -123,4 +150,7 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
         return getMonthViews().get(getCurrentItem());
     }
 
+    public SparseArray<SparseArray<SparseArray<List<Event>>>> getEvents() {
+        return mEvents;
+    }
 }

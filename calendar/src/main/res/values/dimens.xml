@@ -7,4 +7,10 @@
     <dimen name="auto_scroll_distance">15dp</dimen>
     <integer name="calendar_text_size">13</integer>
 
+    <dimen name="g2u_day_stroke_width">1dp</dimen>
+    <dimen name="g2u_lunar_margin">2dp</dimen>
+    <dimen name="g2u_circle_offset">2dp</dimen>
+    <dimen name="g2u_current_day_underline">2dp</dimen>
+    <dimen name="g2u_current_day_underline_size">2dp</dimen>
+    <dimen name="g2u_circle_margin">1dp</dimen>
 </resources>

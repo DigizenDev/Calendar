@@ -21,6 +21,7 @@ public class WeekBarView extends View {
     private Paint mPaint;
     private DisplayMetrics mDisplayMetrics;
     private String[] mWeekString;
+    private int mWeekendTextColor;
 
     public WeekBarView(Context context) {
         this(context, null);
@@ -39,6 +40,7 @@ public class WeekBarView extends View {
     private void initAttrs(Context context, AttributeSet attrs) {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.WeekBarView);
         mWeekTextColor = array.getColor(R.styleable.WeekBarView_week_text_color, Color.parseColor("#4588E3"));
+        mWeekendTextColor = array.getColor(R.styleable.WeekBarView_weekend_text_color, mWeekTextColor);
         mWeekSize = array.getInteger(R.styleable.WeekBarView_week_text_size, 13);
         mWeekString = context.getResources().getStringArray(R.array.calendar_week);
         array.recycle();
@@ -73,6 +75,12 @@ public class WeekBarView extends View {
         int height = getHeight();
         int columnWidth = width / 7;
         for (int i = 0; i < mWeekString.length; i++) {
+            //TODO 周末浅色
+            if (i == 0 || i == mWeekString.length - 1) {
+                mPaint.setColor(mWeekendTextColor);
+            }else{
+                mPaint.setColor(mWeekTextColor);
+            }
             String text = mWeekString[i];
             int fontWidth = (int) mPaint.measureText(text);
             int startX = columnWidth * i + (columnWidth - fontWidth) / 2;

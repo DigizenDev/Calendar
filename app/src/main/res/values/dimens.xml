@@ -52,4 +52,5 @@
     <dimen name="small_week_bar_height">28dp</dimen>
     <dimen name="small_month_calendar_height">224dp</dimen>
 
+
 </resources>

@@ -1,5 +1,10 @@
 package com.jeek.calendar.widget.calendar;
 
+import com.jeek.calendar.widget.calendar.bean.Lunar;
+import com.jeek.calendar.widget.calendar.bean.Solar;
+
+import java.util.HashMap;
+
 /**
  * Created by Jimmy on 2017/1/9 0009.
  * 农历工具类
@@ -16,6 +21,14 @@ public class LunarCalendarUtils {
      */
     private final static String CHINESE_NUMBER[] = {"一", "二", "三", "四", "五",
             "六", "七", "八", "九", "十", "十一", "腊"};
+
+
+    private static final String SOLAR_TERM[][] = {{"小寒", "大寒"}, {"立春", "雨水"}, {"惊蛰", "春分"}, {"清明", "谷雨"}, {"立夏", "小满"}, {"芒种", "夏至"}, {"小暑", "大暑"}, {"立秋", "处暑"}, {"白露", "秋分"}, {"寒露", "霜降"}, {"立冬", "小雪"}, {"大雪", "冬至"}};
+
+
+    private static final HashMap<Integer, String[][]> CACHE_SOLAR_TERM = new HashMap<>();
+    private static SolarTerm mSolarTerm = new SolarTerm();
+
     /**
      * 用来表示1900年到2099年间农历年份的相关信息，共24位bit的16进制表示，其中：
      * 1. 前4位表示该年闰哪个月；
@@ -51,8 +64,9 @@ public class LunarCalendarUtils {
 
     /**
      * 传回农历year年month月的总天数
-     * @param year 要计算的年份
-     * @param month        要计算的月
+     *
+     * @param year  要计算的年份
+     * @param month 要计算的月
      * @return 传回天数
      */
     public static int daysInMonth(int year, int month) {
@@ -61,9 +75,10 @@ public class LunarCalendarUtils {
 
     /**
      * 传回农历year年month月的总天数
-     * @param year 要计算的年份
-     * @param month        要计算的月
-     * @param leap 当月是否是闰月
+     *
+     * @param year  要计算的年份
+     * @param month 要计算的月
+     * @param leap  当月是否是闰月
      * @return 传回天数，如果闰月是错误的，返回0.
      */
     public static int daysInMonth(int year, int month, boolean leap) {
@@ -259,23 +274,130 @@ public class LunarCalendarUtils {
         return lunar;
     }
 
-    public static class Solar {
-        int solarDay;
-        int solarMonth;
-        int solarYear;
+    /**
+     * 公历每月前的天数
+     */
+    private static final int DAYS_BEFORE_MONTH[] = {0, 31, 59, 90, 120, 151, 181,
+            212, 243, 273, 304, 334, 365};
 
-        public Solar(int solarYear, int solarMonth, int solarDay) {
-            this.solarYear = solarYear;
-            this.solarMonth = solarMonth;
-            this.solarDay = solarDay;
+    /**
+     * 将农历日期转换为公历日期
+     *
+     *  year       农历年份
+     *  month      农历月
+     *  monthDay   农历日
+     *                   [url=home.php?mod=space&uid=7300]@return[/url] 返回农历日期对应的公历日期，year0, month1, day2.
+     *  isLeapYear 是否闰月 例:2017的6月,闰6月
+     * @param lunar
+     * @return
+     */
+    public static final Solar lunarToSolar(Lunar lunar) {
+        int dayOffset;
+        int leapMonth;
+        int i;
+
+        int year = lunar.lunarYear;
+        int month = lunar.lunarMonth;
+        int monthDay = lunar.lunarDay;
+        boolean isLeapYear = lunar.isLeap;
+
+        dayOffset = (LUNAR_INFO[year - MIN_YEAR] & 0x001F) - 1;
+
+        if (((LUNAR_INFO[year - MIN_YEAR] & 0x0060) >> 5) == 2)
+            dayOffset += 31;
+
+        for (i = 1; i < month; i++) {
+            if ((LUNAR_INFO[year - MIN_YEAR] & (0x80000 >> (i - 1))) == 0)
+                dayOffset += 29;
+            else
+                dayOffset += 30;
         }
+
+        dayOffset += monthDay;
+        leapMonth = (LUNAR_INFO[year - MIN_YEAR] & 0xf00000) >> 20;
+
+        // 这一年有闰月
+        if (leapMonth != 0) {
+            if (month > leapMonth || (month == leapMonth && isLeapYear)) {
+                if ((LUNAR_INFO[year - MIN_YEAR] & (0x80000 >> (month - 1))) == 0)
+                    dayOffset += 29;
+                else
+                    dayOffset += 30;
+            }
+        }
+
+        if (dayOffset > 366 || (year % 4 != 0 && dayOffset > 365)) {
+            year += 1;
+            if (year % 4 == 1)
+                dayOffset -= 366;
+            else
+                dayOffset -= 365;
+        }
+
+        int[] solarInfo = new int[3];
+        for (i = 1; i < 13; i++) {
+            int iPos = DAYS_BEFORE_MONTH[i];
+            if (year % 4 == 0 && i > 2) {
+                iPos += 1;
+            }
+
+            if (year % 4 == 0 && i == 2 && iPos + 1 == dayOffset) {
+                solarInfo[1] = i;
+                solarInfo[2] = dayOffset - 31;
+                break;
+            }
+
+            if (iPos >= dayOffset) {
+                solarInfo[1] = i;
+                iPos = DAYS_BEFORE_MONTH[i - 1];
+                if (year % 4 == 0 && i > 2) {
+                    iPos += 1;
+                }
+                if (dayOffset > iPos)
+                    solarInfo[2] = dayOffset - iPos;
+                else if (dayOffset == iPos) {
+                    if (year % 4 == 0 && i == 2)
+                        solarInfo[2] = DAYS_BEFORE_MONTH[i] - DAYS_BEFORE_MONTH[i - 1] + 1;
+                    else
+                        solarInfo[2] = DAYS_BEFORE_MONTH[i] - DAYS_BEFORE_MONTH[i - 1];
+
+                } else
+                    solarInfo[2] = dayOffset;
+                break;
+            }
+        }
+        solarInfo[0] = year;
+
+        return new Solar(solarInfo[0], solarInfo[1], solarInfo[2]);
     }
 
-    public static class Lunar {
-        public boolean isLeap;
-        public int lunarDay;
-        public int lunarMonth;
-        public int lunarYear;
+    private static boolean isLeapYear(int year) {
+        if ((year % 400) == 0) {
+            return true;
+        } else if ((year % 100) == 0) {
+            return false;
+        } else if ((year % 4) == 0) {
+            return true;
+        }
+
+        return false;
     }
+
+    public static String getSolarTerm(int year, int month, int day) {
+        String[][] tmp = CACHE_SOLAR_TERM.get(year);
+        if (null == tmp) {
+            tmp = mSolarTerm.buildSolarTerm(year);
+            CACHE_SOLAR_TERM.put(year, tmp);
+        }
+        String[] STOfMonth = tmp[month - 1];
+        if (Integer.valueOf(STOfMonth[0]) == day) {
+            return SOLAR_TERM[month - 1][0];
+        } else if (Integer.valueOf(STOfMonth[1]) == day) {
+            return SOLAR_TERM[month - 1][1];
+        }
+        return "";
+    }
+
+
 
 }

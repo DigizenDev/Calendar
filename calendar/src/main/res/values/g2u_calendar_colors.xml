@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="g2u_week_text_color">#666666</color>
+    <color name="g2u_day_text_color">#555555</color>
+    <color name="g2u_month_selected_circle_color">#fd5072</color>
+    <color name="g2u_week_line">#f2f2f2</color>
+    <color name="g2u_weekend_text_color">#d5d5dd</color>
+    <color name="g2u_title_month_text_color">#55555a</color>
+    <color name="g2u_title_day_text_color">#78787e</color>
+</resources>
