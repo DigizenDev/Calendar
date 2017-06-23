@@ -6,13 +6,15 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.digizen.g2u.widget.calendar.G2UCalendarCardView;
 import com.jeek.calendar.R;
-import com.jeek.calendar.widget.calendar.schedule.Event;
+import com.jeek.calendar.widget.calendar.OnCalendarClickListener;
+import com.jeek.calendar.widget.calendar.schedule.event.Event;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,7 +36,7 @@ public class G2UActivity extends AppCompatActivity {
 
         calendar = (G2UCalendarCardView) findViewById(R.id.calendar);
 
-        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             calendar.addEvent(new Event(dateFormat.parse("2017-06-06"), Color.RED));
             calendar.addEvent(new Event(dateFormat.parse("2017-06-06"), Color.GRAY));
@@ -56,6 +58,19 @@ public class G2UActivity extends AppCompatActivity {
         }
         rv = (RecyclerView) findViewById(R.id.rvScheduleList);
         load();
+        calendar.setOnCalendarClickListener(new OnCalendarClickListener() {
+            @Override
+            public void onClickDate(int year, int month, int day) {
+                Log.d(G2UCalendarCardView.class.getSimpleName(), "onClickDate--->"+year + "-" + month + "-" + day + "----格式化时间-->" + new SimpleDateFormat("yyyy-MM-dd").format(calendar.getSelectDate().getTime())+"---真实--->"+calendar.getRealSelectDay());
+            }
+
+            @Override
+            public void onPageChange(int year, int month, int day) {
+                Log.d(G2UCalendarCardView.class.getSimpleName(), "onPageChange--->"+year + "-" + month + "-" + day + "----格式化时间-->" + new SimpleDateFormat("yyyy-MM-dd").format(calendar.getSelectDate().getTime())+"---真实--->"+calendar.getRealSelectDay());
+            }
+        });
+        //calendar.clearEvent();
+
     }
 
     private void load() {

@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
 import com.jeek.calendar.library.R;
-import com.jeek.calendar.widget.calendar.schedule.Event;
+import com.jeek.calendar.widget.calendar.schedule.event.Event;
+import com.jeek.calendar.widget.calendar.schedule.event.MonthEvent;
+import com.jeek.calendar.widget.calendar.schedule.event.YearEvent;
 
 import org.joda.time.DateTime;
 
@@ -54,10 +56,10 @@ public class MonthAdapter extends PagerAdapter {
         container.addView(monthView);
 
         //整年的事件
-        SparseArray<SparseArray<List<Event>>> yearEvent = mMonthCalendarView.getEvents().get(monthView.getSelectYear());
+        YearEvent yearEvent = mMonthCalendarView.getEvents().get(monthView.getSelectYear());
         if (yearEvent != null) {
             //整月的事件
-            SparseArray<List<Event>> monthEvent = yearEvent.get(monthView.getSelectMonth());
+            MonthEvent monthEvent = yearEvent.getMonthEvents().get(monthView.getSelectMonth());
             if (monthEvent != null) {
                 monthView.setEventList(monthEvent);
             }

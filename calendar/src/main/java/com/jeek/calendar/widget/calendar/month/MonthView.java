@@ -21,7 +21,9 @@ import com.jeek.calendar.widget.calendar.CalendarUtils;
 import com.jeek.calendar.widget.calendar.LunarCalendarUtils;
 import com.jeek.calendar.widget.calendar.bean.Lunar;
 import com.jeek.calendar.widget.calendar.bean.Solar;
-import com.jeek.calendar.widget.calendar.schedule.Event;
+import com.jeek.calendar.widget.calendar.schedule.event.DayEvent;
+import com.jeek.calendar.widget.calendar.schedule.event.Event;
+import com.jeek.calendar.widget.calendar.schedule.event.MonthEvent;
 
 import java.util.Calendar;
 import java.util.List;
@@ -63,7 +65,7 @@ public class MonthView extends View {
     private DisplayMetrics mDisplayMetrics;
     private OnMonthClickListener mDateClickListener;
     private GestureDetector mGestureDetector;
-    private SparseArray<List<Event>> mEventList = new SparseArray<>();
+    private MonthEvent mMonthEvent = new MonthEvent();
     private List<Integer> mTaskHintList;
     private Bitmap mRestBitmap, mWorkBitmap;
 
@@ -476,15 +478,17 @@ public class MonthView extends View {
         if (day == mSelDay) {
             return;
         }
-        if (mIsShowHint && mEventList != null && mEventList.size() > 0) {
+        SparseArray<DayEvent> dayEvents = mMonthEvent.getDayEvents();
+        if (mIsShowHint && dayEvents != null && dayEvents.size() > 0) {
             //TODO 圆点数据如果没有这天
-            if (mEventList.indexOfKey(day) == -1) return;
+            if (dayEvents.indexOfKey(day) == -1) return;
 
             //当天的多个event
-            List<Event> events = mEventList.get(day);
-            if (events == null) {
+            DayEvent dayEvent = dayEvents.get(day);
+            if (dayEvent == null) {
                 return;
             }
+            List<Event> events = dayEvent.getEvents();
             int drawCount = Math.min(events.size(), 2);
             for (int i = 0; i < drawCount; i++) {
                 Event event = events.get(i);
@@ -607,11 +611,11 @@ public class MonthView extends View {
      * @param day
      */
     public void clickThisMonth(int year, int month, int day) {
-        if (mDateClickListener != null) {
-            mDateClickListener.onClickThisMonth(year, month, day);
-        }
         setSelectYearMonth(year, month, day);
         invalidate();
+        if (mDateClickListener != null) {
+            mDateClickListener.onClickThisMonth(year, month, getSelectDay());
+        }
     }
 
     /**
@@ -635,7 +639,7 @@ public class MonthView extends View {
     /**
      * 获取当前选择日
      *
-     * @return
+     * @return 最少1号
      */
     public int getSelectDay() {
         return Math.max(this.mSelDay, 1);
@@ -643,7 +647,7 @@ public class MonthView extends View {
 
     /**
      * 获取真实选择日
-     * @return
+     * @return 有可能为-1,-1则不圈任何天
      */
     public int getRealSelectDay() {
         return this.mSelDay;
@@ -694,8 +698,8 @@ public class MonthView extends View {
         }
     }
 
-    public void setEventList(SparseArray<List<Event>> eventList) {
-        this.mEventList = eventList;
+    public void setEventList(MonthEvent monthEvent) {
+        this.mMonthEvent = monthEvent;
         invalidate();
     }
 

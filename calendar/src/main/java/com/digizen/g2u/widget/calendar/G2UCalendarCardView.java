@@ -10,7 +10,8 @@ import android.widget.TextView;
 import com.jeek.calendar.library.R;
 import com.jeek.calendar.widget.calendar.OnCalendarClickListener;
 import com.jeek.calendar.widget.calendar.month.MonthCalendarView;
-import com.jeek.calendar.widget.calendar.schedule.Event;
+import com.jeek.calendar.widget.calendar.month.MonthView;
+import com.jeek.calendar.widget.calendar.schedule.event.Event;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
@@ -124,6 +125,56 @@ public class G2UCalendarCardView extends RelativeLayout {
 
     public void addEvent(Event event) {
         mCalendarView.addEvent(event);
+    }
+
+
+    public void removeEvent(Event event) {
+
+    }
+
+    /**
+     * 清除所有Event
+     */
+    public void clearEvent() {
+        mCalendarView.clearEvent();
+    }
+
+    public int getSelectDay() {
+        return getCurrentMonthView().getSelectDay();
+    }
+
+    public int getSelectMonth() {
+        return getCurrentMonthView().getSelectMonth();
+    }
+
+    public int getSelectYear() {
+        return getCurrentMonthView().getSelectYear();
+    }
+
+    public int getRealSelectDay() {
+        return getCurrentMonthView().getRealSelectDay();
+    }
+
+    public int getRowSize() {
+        return getCurrentMonthView().getRowSize();
+    }
+
+
+    public Calendar getSelectDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, getSelectYear());
+        calendar.set(Calendar.MONTH, getSelectMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, getSelectDay());
+        return calendar;
+    }
+
+    public MonthView getCurrentMonthView() {
+        return mCalendarView.getCurrentMonthView();
+    }
+
+
+    public void addOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
+        mCalendarView.addOnPageChangeListener(listener);
     }
 
 }

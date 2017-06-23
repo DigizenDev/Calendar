@@ -8,11 +8,12 @@ import android.util.SparseArray;
 
 import com.jeek.calendar.library.R;
 import com.jeek.calendar.widget.calendar.OnCalendarClickListener;
-import com.jeek.calendar.widget.calendar.schedule.Event;
+import com.jeek.calendar.widget.calendar.schedule.event.DayEvent;
+import com.jeek.calendar.widget.calendar.schedule.event.Event;
+import com.jeek.calendar.widget.calendar.schedule.event.MonthEvent;
+import com.jeek.calendar.widget.calendar.schedule.event.YearEvent;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Created by Jimmy on 2016/10/6 0006.
@@ -23,7 +24,7 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
     private OnCalendarClickListener mOnCalendarClickListener;
 
     //<year,<month,<day,List<event>>
-    private SparseArray<SparseArray<SparseArray<List<Event>>>> mEvents = new SparseArray<>();
+    private SparseArray<YearEvent> mEvents = new SparseArray<>();
 
     public MonthCalendarView(Context context) {
         this(context, null);
@@ -80,12 +81,14 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
         @Override
         public void onPageSelected(final int position) {
             MonthView monthView = mMonthAdapter.getViews().get(getCurrentItem());
-            int realSelectDay = monthView.getRealSelectDay();
-            //Log.d("----------------->",monthView.getSelectMonth()+" "+monthView.getRealSelectDay()+" "+realSelectDay);
             if (monthView != null) {
+                int realSelectDay = monthView.getRealSelectDay();
+                int selectDay = monthView.getSelectDay();
+                //Log.d("----------------->",monthView.getSelectMonth()+" "+monthView.getRealSelectDay()+" "+realSelectDay);
+
                 monthView.clickThisMonth(monthView.getSelectYear(), monthView.getSelectMonth(), realSelectDay);
                 if (mOnCalendarClickListener != null) {
-                    mOnCalendarClickListener.onPageChange(monthView.getSelectYear(), monthView.getSelectMonth(), realSelectDay);
+                    mOnCalendarClickListener.onPageChange(monthView.getSelectYear(), monthView.getSelectMonth(), selectDay);
                 }
             } else {
                 MonthCalendarView.this.postDelayed(new Runnable() {
@@ -121,22 +124,57 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        SparseArray<SparseArray<List<Event>>> yearEvents = mEvents.get(year);
+        YearEvent yearEvents = mEvents.get(year);
         if (yearEvents == null) {
-            yearEvents = new SparseArray<>();
+            yearEvents = new YearEvent();
             mEvents.put(year, yearEvents);
         }
-        SparseArray<List<Event>> monthEvents = yearEvents.get(month);
+        MonthEvent monthEvents = yearEvents.getMonthEvents().get(month);
         if (monthEvents == null) {
-            monthEvents = new SparseArray<>();
-            yearEvents.put(month, monthEvents);
+            monthEvents = new MonthEvent();
+            yearEvents.getMonthEvents().put(month, monthEvents);
         }
-        List<Event> dayEvents = monthEvents.get(day);
+        DayEvent dayEvents = monthEvents.getDayEvents().get(day);
         if (dayEvents == null) {
-            dayEvents = new ArrayList<>();
-            monthEvents.put(day, dayEvents);
+            dayEvents = new DayEvent();
+            monthEvents.getDayEvents().put(day, dayEvents);
         }
-        dayEvents.add(event);
+        dayEvents.getEvents().add(event);
+    }
+
+
+    /**
+     * 删除整月的event
+     *
+     * @param year
+     * @param month
+     */
+    public void removeMonthEvent(int year, int month) {
+        YearEvent yearEvents = mEvents.get(year);
+        if (yearEvents != null) {
+        }
+    }
+
+    /**
+     * 删除整天的event
+     *
+     * @param day
+     */
+    public void removeDayEvent(int day) {
+
+    }
+
+    /**
+     * 删除单个event
+     *
+     * @param eventId
+     */
+    public void removeEvent(String eventId) {
+
+    }
+
+    public void clearEvent() {
+        mEvents.clear();
     }
 
     /**
@@ -156,7 +194,8 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
         return getMonthViews().get(getCurrentItem());
     }
 
-    public SparseArray<SparseArray<SparseArray<List<Event>>>> getEvents() {
+    public SparseArray<YearEvent> getEvents() {
         return mEvents;
     }
+
 }
