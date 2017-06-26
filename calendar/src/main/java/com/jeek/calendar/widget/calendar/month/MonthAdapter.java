@@ -49,8 +49,8 @@ public class MonthAdapter extends PagerAdapter {
             monthView.invalidate();
             monthView.setOnDateClickListener(mMonthCalendarView);
             mViews.put(position, monthView);
-            container.addView(monthView);
         }
+        container.addView(monthView);
 
         //刷新event
         YearEvent yearEvent = mMonthCalendarView.getEvents().get(monthView.getSelectYear());
@@ -73,7 +73,7 @@ public class MonthAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        //container.removeView((View) object);
+        container.removeView((View) object);
     }
 
     @Override

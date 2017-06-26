@@ -77,7 +77,7 @@ public class G2UCalendarCardView extends RelativeLayout {
                 mOffscreenPageLimit = INITIAL_OFFSCREEN_PAGE_LIMIT;
             }
         });
-        //setDynamicOffscreenPageLimit();
+        setDynamicOffscreenPageLimit();
         mCalendarView.setOnCalendarClickListener(new OnCalendarClickListener() {
             @Override
             public void onClickDate(int year, int month, int day) {
