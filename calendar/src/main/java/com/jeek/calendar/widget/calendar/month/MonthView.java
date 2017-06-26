@@ -434,7 +434,7 @@ public class MonthView extends View {
 
                     //TODO 下划线
                     //Log.d("-------->", lunar.lunarYear + "-" + lunar.lunarMonth + "-" + day + "," + mCurrLunarYear + "-" + (mCurrLunarMonth + 1) + "-" + (mCurrLunarDay+1));
-                    if (mSelDay != mCurrDay && solar.solarYear == mCurrYear && solar.solarMonth == mCurrMonth + 1 && solar.solarDay == mCurrDay) {
+                    if (mSelDay != mCurrDay && solar.solarYear == mCurrYear && (solar.solarMonth == mCurrMonth + 1 && solar.solarMonth == mSelMonth + 1) && solar.solarDay == mCurrDay) {
                         Paint underlinePaint = new Paint();
                         underlinePaint.setColor(mSelectBGColor);
                         int underlineMargin = getResources().getDimensionPixelSize(R.dimen.g2u_current_day_underline);
@@ -647,6 +647,7 @@ public class MonthView extends View {
 
     /**
      * 获取真实选择日
+     *
      * @return 有可能为-1,-1则不圈任何天
      */
     public int getRealSelectDay() {
@@ -699,7 +700,7 @@ public class MonthView extends View {
     }
 
     public void setEventList(MonthEvent monthEvent) {
-        this.mMonthEvent = monthEvent;
+        this.mMonthEvent = monthEvent == null ? new MonthEvent() : monthEvent;
         invalidate();
     }
 

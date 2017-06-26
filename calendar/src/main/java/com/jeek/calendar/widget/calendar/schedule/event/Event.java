@@ -1,6 +1,6 @@
 package com.jeek.calendar.widget.calendar.schedule.event;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.UUID;
 
 /**
@@ -9,17 +9,26 @@ import java.util.UUID;
  */
 public class Event {
     private String id;
-    private Date date;
+    private Calendar date;
     private int color;
 
-    public Event(String id, Date date, int color) {
+    public Event(String id, Calendar date, int color) {
         this.id = id;
         this.date = date;
         this.color = color;
     }
 
-    public Event(Date date, int color) {
+    public Event(Calendar date, int color) {
         this(generateEventId(), date, color);
+    }
+
+    public Event(String id, int color) {
+        this(id, null, color);
+    }
+
+
+    public Event(int color) {
+        this(generateEventId(), null, color);
     }
 
     public String getId() {
@@ -30,20 +39,32 @@ public class Event {
         this.id = id;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.date = date;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 
     public int getColor() {
         return color;
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public int getMonth() {
+        return date.get(Calendar.MONTH);
+    }
+
+    public int getDay() {
+        return date.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public int getYear() {
+        return date.get(Calendar.YEAR);
     }
 
 

@@ -9,13 +9,10 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
 import com.jeek.calendar.library.R;
-import com.jeek.calendar.widget.calendar.schedule.event.Event;
 import com.jeek.calendar.widget.calendar.schedule.event.MonthEvent;
 import com.jeek.calendar.widget.calendar.schedule.event.YearEvent;
 
 import org.joda.time.DateTime;
-
-import java.util.List;
 
 /**
  * Created by Jimmy on 2016/10/6 0006.
@@ -55,14 +52,12 @@ public class MonthAdapter extends PagerAdapter {
         }
         container.addView(monthView);
 
-        //整年的事件
+        //刷新event
         YearEvent yearEvent = mMonthCalendarView.getEvents().get(monthView.getSelectYear());
         if (yearEvent != null) {
             //整月的事件
             MonthEvent monthEvent = yearEvent.getMonthEvents().get(monthView.getSelectMonth());
-            if (monthEvent != null) {
-                monthView.setEventList(monthEvent);
-            }
+            monthView.setEventList(monthEvent);
         }
         return monthView;
     }
@@ -78,7 +73,7 @@ public class MonthAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
+        //container.removeView((View) object);
     }
 
     @Override
@@ -92,6 +87,12 @@ public class MonthAdapter extends PagerAdapter {
 
     public int getMonthCount() {
         return mMonthCount;
+    }
+
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 
 }

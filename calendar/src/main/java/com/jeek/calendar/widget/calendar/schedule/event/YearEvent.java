@@ -17,7 +17,7 @@ public class YearEvent {
     }
 
     public SparseArray<MonthEvent> getMonthEvents() {
-        return monthEvents == null ? new SparseArray<MonthEvent>() : monthEvents;
+        return monthEvents == null ? monthEvents = new SparseArray<MonthEvent>() : monthEvents;
     }
 
     public void setMonthEvents(SparseArray<MonthEvent> monthEvents) {

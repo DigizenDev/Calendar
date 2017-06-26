@@ -18,7 +18,7 @@ public class DayEvent {
     }
 
     public List<Event> getEvents() {
-        return events == null ? new ArrayList<Event>() : events;
+        return events == null ? events = new ArrayList<Event>() : events;
     }
 
     public void setEvents(List<Event> events) {

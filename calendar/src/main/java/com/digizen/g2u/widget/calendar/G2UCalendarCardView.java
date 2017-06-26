@@ -1,17 +1,21 @@
 package com.digizen.g2u.widget.calendar;
 
 import android.content.Context;
+import android.support.annotation.ColorInt;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jeek.calendar.library.R;
+import com.jeek.calendar.widget.calendar.OnCalendarChangeListener;
 import com.jeek.calendar.widget.calendar.OnCalendarClickListener;
 import com.jeek.calendar.widget.calendar.month.MonthCalendarView;
 import com.jeek.calendar.widget.calendar.month.MonthView;
 import com.jeek.calendar.widget.calendar.schedule.event.Event;
+import com.jeek.calendar.widget.calendar.schedule.event.YearEvent;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
@@ -29,7 +33,7 @@ public class G2UCalendarCardView extends RelativeLayout {
     private String[] mFormatMonths = new DateFormatSymbols(Locale.getDefault()).getMonths();
 
     private MonthCalendarView mCalendarView;
-    private OnCalendarClickListener mOnCalendarClickListener;
+    private OnCalendarChangeListener mOnCalendarChangeListener;
     private final int INITIAL_OFFSCREEN_PAGE_LIMIT = 1;//最少1
     private int mOffscreenPageLimit = INITIAL_OFFSCREEN_PAGE_LIMIT;
 
@@ -72,6 +76,36 @@ public class G2UCalendarCardView extends RelativeLayout {
                 mOffscreenPageLimit = INITIAL_OFFSCREEN_PAGE_LIMIT;
             }
         });
+        //setDynamicOffscreenPageLimit();
+        mCalendarView.setOnCalendarClickListener(new OnCalendarClickListener() {
+            @Override
+            public void onClickDate(int year, int month, int day) {
+                if (mOnCalendarChangeListener != null) {
+                    mOnCalendarChangeListener.onClickDate(getCalendar(year, month, day), year, month, day);
+                }
+            }
+
+            @Override
+            public void onPageChange(int year, int month, int day) {
+                setCurrentDateTitle(year, month);
+                if (mOnCalendarChangeListener != null) {
+                    mOnCalendarChangeListener.onPageChange(getCalendar(year, month, day), year, month, day);
+                }
+            }
+
+            private Calendar getCalendar(int year, int month, int day) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, day);
+                return calendar;
+            }
+        });
+        Calendar calendar = Calendar.getInstance();
+        setCurrentDateTitle(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH));
+    }
+
+    private void setDynamicOffscreenPageLimit() {
         mCalendarView.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             private int currentPosition = mCalendarView.getCurrentItem();
 
@@ -93,29 +127,11 @@ public class G2UCalendarCardView extends RelativeLayout {
                 mCalendarView.setOffscreenPageLimit(Math.abs(mOffscreenPageLimit) + INITIAL_OFFSCREEN_PAGE_LIMIT);
             }
         });
-        mCalendarView.setOnCalendarClickListener(new OnCalendarClickListener() {
-            @Override
-            public void onClickDate(int year, int month, int day) {
-                if (mOnCalendarClickListener != null) {
-                    mOnCalendarClickListener.onClickDate(year, month, day);
-                }
-            }
-
-            @Override
-            public void onPageChange(int year, int month, int day) {
-                setCurrentDateTitle(year, month);
-                if (mOnCalendarClickListener != null) {
-                    mOnCalendarClickListener.onPageChange(year, month, day);
-                }
-            }
-        });
-        Calendar calendar = Calendar.getInstance();
-        setCurrentDateTitle(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH));
     }
 
 
-    public void setOnCalendarClickListener(OnCalendarClickListener onCalendarClickListener) {
-        mOnCalendarClickListener = onCalendarClickListener;
+    public void setOnCalendarChangeListener(OnCalendarChangeListener listener) {
+        this.mOnCalendarChangeListener = listener;
     }
 
     public void setCurrentDateTitle(int year, int month) {
@@ -123,37 +139,77 @@ public class G2UCalendarCardView extends RelativeLayout {
         mTitleMonth.setText(mFormatMonths[month]);
     }
 
-    public void addEvent(Event event) {
-        mCalendarView.addEvent(event);
+
+    public boolean addEvent(int year, int month, int day, @ColorInt int color) {
+        return mCalendarView.addEvent(year, month, day, color);
+    }
+
+    public boolean addEvent(int year, int month, int day, String eventId, @ColorInt int color) {
+        return mCalendarView.addEvent(year, month, day, eventId, color);
+    }
+
+    public boolean addEvent(int year, int month, int day, Event event) {
+        return mCalendarView.addEvent(year, month, day, event);
+    }
+
+    public boolean addEvent(Event event) {
+        return mCalendarView.addEvent(event);
     }
 
 
-    public void removeEvent(Event event) {
+    /**
+     * 杀出整年的event
+     *
+     * @param year
+     * @return
+     */
+    public boolean removeYearEvent(int year) {
+        return mCalendarView.removeYearEvent(year);
+    }
 
+
+    /**
+     * 删除整月的event
+     *
+     * @param year
+     * @param month 从0开始
+     */
+    public boolean removeMonthEvent(int year, int month) {
+        return mCalendarView.removeMonthEvent(year, month);
     }
 
     /**
-     * 清除所有Event
+     * 删除整天的event
+     *
+     * @param year
+     * @param month 从0开始
+     * @param day
      */
-    public void clearEvent() {
-        mCalendarView.clearEvent();
+    public boolean removeDayEvent(int year, int month, int day) {
+        return mCalendarView.removeDayEvent(year, month, day);
     }
 
-    public int getSelectDay() {
-        return getCurrentMonthView().getSelectDay();
+    /**
+     * 删除单个event
+     *
+     * @param eventId
+     */
+    public boolean removeEvent(int year, int month, int day, String eventId) {
+        return mCalendarView.removeEvent(year, month, day, eventId);
     }
 
-    public int getSelectMonth() {
-        return getCurrentMonthView().getSelectMonth();
+
+    public boolean removeEvent(Event event) {
+        return mCalendarView.removeEvent(event);
     }
 
-    public int getSelectYear() {
-        return getCurrentMonthView().getSelectYear();
+    /**
+     * 清除所有event
+     */
+    public void clearAllEvent() {
+        mCalendarView.clearAllEvent();
     }
 
-    public int getRealSelectDay() {
-        return getCurrentMonthView().getRealSelectDay();
-    }
 
     public int getRowSize() {
         return getCurrentMonthView().getRowSize();
@@ -161,11 +217,23 @@ public class G2UCalendarCardView extends RelativeLayout {
 
 
     public Calendar getSelectDate() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, getSelectYear());
-        calendar.set(Calendar.MONTH, getSelectMonth());
-        calendar.set(Calendar.DAY_OF_MONTH, getSelectDay());
-        return calendar;
+        return mCalendarView.getSelectDate();
+    }
+
+    public int getSelectDay() {
+        return mCalendarView.getSelectDay();
+    }
+
+    public int getSelectMonth() {
+        return mCalendarView.getSelectMonth();
+    }
+
+    public int getSelectYear() {
+        return mCalendarView.getSelectYear();
+    }
+
+    public int getRealSelectDay() {
+        return mCalendarView.getRealSelectDay();
     }
 
     public MonthView getCurrentMonthView() {
@@ -173,8 +241,14 @@ public class G2UCalendarCardView extends RelativeLayout {
     }
 
 
+    public SparseArray<YearEvent> getEvents() {
+        return mCalendarView.getEvents();
+    }
+
+
     public void addOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
         mCalendarView.addOnPageChangeListener(listener);
     }
+
 
 }
