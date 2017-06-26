@@ -7,12 +7,14 @@ import android.util.SparseArray;
  * created 2017/6/23 19:09
  */
 public class YearEvent {
+    private int year;
     private SparseArray<MonthEvent> monthEvents;
 
     public YearEvent() {
     }
 
-    public YearEvent(SparseArray<MonthEvent> monthEvents) {
+    public YearEvent(int year, SparseArray<MonthEvent> monthEvents) {
+        this.year = year;
         this.monthEvents = monthEvents;
     }
 
@@ -22,5 +24,13 @@ public class YearEvent {
 
     public void setMonthEvents(SparseArray<MonthEvent> monthEvents) {
         this.monthEvents = monthEvents;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 }

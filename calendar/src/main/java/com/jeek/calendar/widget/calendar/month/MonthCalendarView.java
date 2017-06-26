@@ -19,6 +19,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Months;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -140,17 +141,17 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
     public boolean addEvent(int year, int month, int day, Event event) {
         YearEvent yearEvents = mEvents.get(year);
         if (yearEvents == null) {
-            yearEvents = new YearEvent();
+            yearEvents = new YearEvent(year, new SparseArray<MonthEvent>());
             mEvents.put(year, yearEvents);
         }
         MonthEvent monthEvents = yearEvents.getMonthEvents().get(month);
         if (monthEvents == null) {
-            monthEvents = new MonthEvent();
+            monthEvents = new MonthEvent(month, new SparseArray<DayEvent>());
             yearEvents.getMonthEvents().put(month, monthEvents);
         }
         DayEvent dayEvents = monthEvents.getDayEvents().get(day);
         if (dayEvents == null) {
-            dayEvents = new DayEvent();
+            dayEvents = new DayEvent(day, new ArrayList<Event>());
             monthEvents.getDayEvents().put(day, dayEvents);
         }
         if (event.getDate() == null) {
@@ -167,6 +168,17 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
 
     public boolean addEvent(Event event) {
         return addEvent(event.getYear(), event.getMonth(), event.getDay(), event);
+    }
+
+
+    public void setYearEvent(YearEvent yearEvent) {
+        mEvents.put(yearEvent.getYear(), yearEvent);
+        mMonthAdapter.notifyDataSetChanged();
+    }
+
+    public void setMonthEvent(int year, MonthEvent monthEvent) {
+        mEvents.get(year).getMonthEvents().put(monthEvent.getMonth(), monthEvent);
+        mMonthAdapter.notifyDataSetChanged();
     }
 
 

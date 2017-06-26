@@ -8,9 +8,11 @@ import java.util.List;
  * created 2017/6/23 19:09
  */
 public class DayEvent {
+    private int day;
     private List<Event> events;
 
-    public DayEvent(List<Event> events) {
+    public DayEvent(int day, List<Event> events) {
+        this.day = day;
         this.events = events;
     }
 
@@ -23,5 +25,13 @@ public class DayEvent {
 
     public void setEvents(List<Event> events) {
         this.events = events;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
     }
 }
