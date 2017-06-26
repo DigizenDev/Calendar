@@ -86,6 +86,7 @@ public class MonthView extends View {
 
     public MonthView(Context context, TypedArray array, AttributeSet attrs, int defStyleAttr, int year, int month) {
         super(context, attrs, defStyleAttr);
+        setBackgroundColor(Color.WHITE);
         initAttrs(array, year, month);
         initPaint();
         initMonth();
@@ -507,7 +508,7 @@ public class MonthView extends View {
                 //中心位置
                 float circleX = (float) (mColumnSize * column + mColumnSize * 0.5);
                 //float circleY = (float) (mRowSize * row + mRowSize * 0.75);
-                float circleY = (float) (mRowSize * row + mRowSize * 0.3);
+                float circleY = (float) (mRowSize * row + mRowSize * 0.25f);
 
                 /*float centerX = circleX;
                 if (drawCount > 1) {
