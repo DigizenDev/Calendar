@@ -260,5 +260,7 @@ public class G2UCalendarCardView extends RelativeLayout {
         mCalendarView.addOnPageChangeListener(listener);
     }
 
-
+    public MonthCalendarView getCalendarView() {
+        return mCalendarView;
+    }
 }
