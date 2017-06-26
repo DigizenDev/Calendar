@@ -15,6 +15,7 @@ import com.jeek.calendar.widget.calendar.OnCalendarClickListener;
 import com.jeek.calendar.widget.calendar.month.MonthCalendarView;
 import com.jeek.calendar.widget.calendar.month.MonthView;
 import com.jeek.calendar.widget.calendar.schedule.event.Event;
+import com.jeek.calendar.widget.calendar.schedule.event.MonthEvent;
 import com.jeek.calendar.widget.calendar.schedule.event.YearEvent;
 
 import java.text.DateFormatSymbols;
@@ -201,6 +202,15 @@ public class G2UCalendarCardView extends RelativeLayout {
 
     public boolean removeEvent(Event event) {
         return mCalendarView.removeEvent(event);
+    }
+
+
+    public void setYearEvent(YearEvent yearEvent) {
+        mCalendarView.setYearEvent(yearEvent);
+    }
+
+    public void setMonthEvent(int year, MonthEvent monthEvent) {
+        mCalendarView.setMonthEvent(year, monthEvent);
     }
 
     /**
