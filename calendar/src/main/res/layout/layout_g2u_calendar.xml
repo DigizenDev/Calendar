@@ -114,7 +114,7 @@
                             app:month_selected_circle_color="@color/g2u_month_selected_circle_color"
                             app:month_selected_text_color="@color/g2u_day_text_color"
                             app:month_show_holiday_hint="false"
-                            app:month_show_last="true"
+                            app:month_show_last="false"
                             app:month_show_lunar="true"
                             app:month_show_task_hint="true"
                             app:month_today_text_color="@color/g2u_day_text_color" />

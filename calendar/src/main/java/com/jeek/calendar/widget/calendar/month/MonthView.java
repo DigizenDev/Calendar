@@ -35,6 +35,7 @@ public class MonthView extends View {
 
     private static final int NUM_COLUMNS = 7;
     private static final int NUM_ROWS = 6;
+    private static final int NUM_ROWS_MIN = 5;
     private static final int NOT_SELECTED_DAY = -1;//都不选中
     private Paint mPaint;
     private Paint mLunarPaint;
@@ -218,13 +219,21 @@ public class MonthView extends View {
 
     private void initSize() {
         mColumnSize = getWidth() / NUM_COLUMNS;
-        mRowSize = getHeight() / NUM_ROWS;
+        //mRowSize = getHeight() / NUM_ROWS;
+        mRowSize = getHeight() / getSelectNumberRows();
         //mSelectCircleSize = (int) (mColumnSize / 3.2);
         mSelectCircleSize = (int) (mColumnSize / 2.8);
         while (mSelectCircleSize > mRowSize / 2) {
             mSelectCircleSize = (int) (mSelectCircleSize / 1.3);
         }
     }
+
+    private int getSelectNumberRows() {
+        int weekNumber = CalendarUtils.getFirstDayWeek(mSelYear, mSelMonth);
+        int rows = weekNumber - 1 + getSelectDaysOfMonth() > NUM_ROWS_MIN * NUM_COLUMNS ? NUM_ROWS : NUM_ROWS_MIN;
+        return rows;
+    }
+
 
     private void clearData() {
         mDaysText = new int[6][7];
@@ -711,6 +720,19 @@ public class MonthView extends View {
      */
     public void setOnDateClickListener(OnMonthClickListener dateClickListener) {
         this.mDateClickListener = dateClickListener;
+    }
+
+
+    /**
+     * 当前月有多少天
+     *
+     * @return
+     */
+    public int getSelectDaysOfMonth() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, mSelYear);
+        calendar.set(Calendar.MONTH, mSelMonth);
+        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 }
 

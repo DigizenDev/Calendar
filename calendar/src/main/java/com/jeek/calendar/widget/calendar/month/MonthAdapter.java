@@ -49,8 +49,8 @@ public class MonthAdapter extends PagerAdapter {
             monthView.invalidate();
             monthView.setOnDateClickListener(mMonthCalendarView);
             mViews.put(position, monthView);
+            container.addView(monthView);
         }
-        container.addView(monthView);
 
         //刷新event
         YearEvent yearEvent = mMonthCalendarView.getEvents().get(monthView.getSelectYear());
