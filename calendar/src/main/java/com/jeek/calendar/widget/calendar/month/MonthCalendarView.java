@@ -177,7 +177,12 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
     }
 
     public void setMonthEvent(int year, MonthEvent monthEvent) {
-        mEvents.get(year).getMonthEvents().put(monthEvent.getMonth(), monthEvent);
+        YearEvent yearEvent = mEvents.get(year);
+        if (yearEvent == null) {
+            yearEvent = new YearEvent(year, new SparseArray<MonthEvent>());
+            mEvents.put(yearEvent.getYear(), yearEvent);
+        }
+        yearEvent.getMonthEvents().put(monthEvent.getMonth(), monthEvent);
         mMonthAdapter.notifyDataSetChanged();
     }
 
