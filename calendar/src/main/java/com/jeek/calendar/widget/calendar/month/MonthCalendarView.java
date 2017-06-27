@@ -34,6 +34,8 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
     //<year,<month,<day,List<event>>
     private SparseArray<YearEvent> mEvents = new SparseArray<>();
 
+    private boolean mAnimateEnd = true;//是否动画结束再回调
+
     public MonthCalendarView(Context context) {
         this(context, null);
     }
@@ -82,7 +84,7 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
     }
 
     private OnPageChangeListener mOnPageChangeListener = new OnPageChangeListener() {
-        private int mPageState;
+        private int mPosition;
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -90,7 +92,21 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
 
         @Override
         public void onPageSelected(final int position) {
-            Log.d("onPageSelected-------->", mPageState + "");
+            this.mPosition = position;
+            if (!mAnimateEnd) {
+                callPageSelected(this.mPosition);
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            if (mAnimateEnd && state == ViewPager.SCROLL_STATE_IDLE) {
+                callPageSelected(this.mPosition);
+            }
+        }
+
+
+        private void callPageSelected(final int position) {
             MonthView monthView = mMonthAdapter.getViews().get(getCurrentItem());
             if (monthView != null) {
                 int realSelectDay = monthView.getRealSelectDay();
@@ -110,11 +126,6 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
                     }
                 }, 50);
             }
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-            mPageState = state;
         }
     };
 
@@ -356,6 +367,10 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
 
     public int getRealSelectDay() {
         return getCurrentMonthView().getRealSelectDay();
+    }
+
+    public void setAnimateEnd(boolean animateEnd) {
+        this.mAnimateEnd = animateEnd;
     }
 
 }

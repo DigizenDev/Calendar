@@ -77,6 +77,7 @@ public class G2UCalendarCardView extends RelativeLayout {
                 mOffscreenPageLimit = INITIAL_OFFSCREEN_PAGE_LIMIT;
             }
         });
+
         setDynamicOffscreenPageLimit();
         mCalendarView.setOnCalendarClickListener(new OnCalendarClickListener() {
             @Override
@@ -127,6 +128,7 @@ public class G2UCalendarCardView extends RelativeLayout {
                 //Log.d("onPageSelected", "mOffscreenPageLimit-->" + mOffscreenPageLimit);
                 mCalendarView.setOffscreenPageLimit(Math.abs(mOffscreenPageLimit) + INITIAL_OFFSCREEN_PAGE_LIMIT);
             }
+
         });
     }
 
@@ -262,5 +264,10 @@ public class G2UCalendarCardView extends RelativeLayout {
 
     public MonthCalendarView getCalendarView() {
         return mCalendarView;
+    }
+
+
+    public void setAnimateEnd(boolean animateEnd) {
+        mCalendarView.setAnimateEnd(animateEnd);
     }
 }
