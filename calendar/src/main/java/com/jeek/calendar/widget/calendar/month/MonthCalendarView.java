@@ -133,7 +133,7 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
      * 跳转到今天
      */
     public void setTodayToView() {
-        setCurrentItem(mMonthAdapter.getMonthCount() / 2, false);
+        setCurrentItem(mMonthAdapter.getMonthCount() / 2);
         MonthView monthView = mMonthAdapter.getViews().get(mMonthAdapter.getMonthCount() / 2);
         if (monthView != null) {
             Calendar calendar = Calendar.getInstance();
