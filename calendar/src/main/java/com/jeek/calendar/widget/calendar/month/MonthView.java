@@ -499,7 +499,7 @@ public class MonthView extends View {
                 return;
             }
             List<Event> events = dayEvent.getEvents();
-            int maxDrawCount = Math.min(events.size(), 2);
+            int maxDrawCount = getMaxDrawEventCount(events);
             int tmpColor = 0;
             int drawCount = 0;
             for (int i = 0; i < events.size(); i++) {
@@ -561,6 +561,19 @@ public class MonthView extends View {
                 drawCount++;
             }
         }
+    }
+
+    private int getMaxDrawEventCount(List<Event> events) {
+        int tmpColor = 0;
+        int maxDrawCount = 0;
+        for (Event e : events) {
+            if (tmpColor == e.getColor()) {
+                continue;
+            }
+            tmpColor = e.getColor();
+            maxDrawCount++;
+        }
+        return maxDrawCount;
     }
 
     @Override
