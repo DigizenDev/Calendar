@@ -499,9 +499,18 @@ public class MonthView extends View {
                 return;
             }
             List<Event> events = dayEvent.getEvents();
-            int drawCount = Math.min(events.size(), 2);
-            for (int i = 0; i < drawCount; i++) {
+            int maxDrawCount = Math.min(events.size(), 2);
+            int tmpColor = 0;
+            int drawCount = 0;
+            for (int i = 0; i < events.size(); i++) {
+                if (drawCount >= maxDrawCount) {
+                    break;
+                }
                 Event event = events.get(i);
+                if (tmpColor == event.getColor()) {
+                    continue;
+                }
+                tmpColor = event.getColor();
                 mPaint.setColor(event.getColor());
                 int circleMargin = getResources().getDimensionPixelSize(R.dimen.g2u_circle_margin);
                 //float circleX = (float) (mColumnSize * column + mColumnSize * 0.5);
@@ -537,8 +546,8 @@ public class MonthView extends View {
                     }
                 }*/
 
-                if (drawCount > 1) {
-                    if (i == 0) {
+                if (maxDrawCount > 1) {
+                    if (drawCount == 0) {
                         //往左偏移event个数的X值
                         //circleX = circleX - (circleMargin * (drawCount - 1) + mCircleRadius * 2);
                         circleX = circleX - mCircleRadius - circleMargin;
@@ -546,8 +555,10 @@ public class MonthView extends View {
                         circleX = circleX + mCircleRadius + circleMargin;
                     }
                 }
+
                 //circleX = circleX + circleMargin * i + mCircleRadius * 2;
                 canvas.drawCircle(circleX, circleY, mCircleRadius, mPaint);
+                drawCount++;
             }
         }
     }

@@ -198,6 +198,22 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
     }
 
 
+    public void setDayEvent(int year, int month, DayEvent dayEvent) {
+        YearEvent yearEvent = mEvents.get(year);
+        if (yearEvent == null) {
+            yearEvent = new YearEvent(year, new SparseArray<MonthEvent>());
+            mEvents.put(yearEvent.getYear(), yearEvent);
+        }
+        MonthEvent monthEvent = yearEvent.getMonthEvents().get(month);
+        if (monthEvent == null) {
+            monthEvent = new MonthEvent(month, new SparseArray<DayEvent>());
+            yearEvent.getMonthEvents().put(monthEvent.getMonth(), monthEvent);
+        }
+        monthEvent.getDayEvents().put(dayEvent.getDay(), dayEvent);
+        mMonthAdapter.notifyDataSetChanged();
+    }
+
+
     /**
      * 杀出整年的event
      *
@@ -318,6 +334,36 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
 
     public SparseArray<YearEvent> getEvents() {
         return mEvents;
+    }
+
+    public YearEvent getYearEventNotNull(int year) {
+        YearEvent yearEvent = mEvents.get(year);
+        if (yearEvent == null) {
+            yearEvent = new YearEvent(year, new SparseArray<MonthEvent>());
+            mEvents.put(year, yearEvent);
+        }
+        return yearEvent;
+    }
+
+
+    public MonthEvent getMonthEventNotNull(int year, int month) {
+        YearEvent yearEvent = getYearEventNotNull(year);
+        MonthEvent monthEvent = yearEvent.getMonthEvents().get(month);
+        if (monthEvent == null) {
+            monthEvent = new MonthEvent(month, new SparseArray<DayEvent>());
+            yearEvent.getMonthEvents().put(month, monthEvent);
+        }
+        return monthEvent;
+    }
+
+    public DayEvent getDayEventNotNull(int year, int month, int day) {
+        MonthEvent monthEvent = getMonthEventNotNull(year, month);
+        DayEvent dayEvent = monthEvent.getDayEvents().get(day);
+        if (dayEvent == null) {
+            dayEvent = new DayEvent(day, new ArrayList<Event>());
+            monthEvent.getDayEvents().put(day, dayEvent);
+        }
+        return dayEvent;
     }
 
 

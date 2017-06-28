@@ -153,6 +153,32 @@ public class G2UActivity extends AppCompatActivity {
         calendar.clearAllEvent();
     }
 
+
+    public void clickAddRedEvent(View v) {
+        int year = calendar.getSelectYear();
+        int month = calendar.getSelectMonth();
+        Calendar current = Calendar.getInstance();
+        int day = current.get(Calendar.DAY_OF_MONTH);
+        calendar.addEvent(year, month, day, Color.RED);
+    }
+
+    public void clickAddGreenEvent(View v) {
+        int year = calendar.getSelectYear();
+        int month = calendar.getSelectMonth();
+        Calendar current = Calendar.getInstance();
+        int day = current.get(Calendar.DAY_OF_MONTH);
+        calendar.addEvent(year, month, day, Color.GREEN);
+    }
+
+    public void clickAddBlueEvent(View v) {
+        int year = calendar.getSelectYear();
+        int month = calendar.getSelectMonth();
+        Calendar current = Calendar.getInstance();
+        int day = current.get(Calendar.DAY_OF_MONTH);
+        calendar.addEvent(year, month, day, Color.BLUE);
+    }
+
+
     private void load() {
         final List<String> data = new ArrayList<>();
         for (int i = 0; i < 20; i++) {

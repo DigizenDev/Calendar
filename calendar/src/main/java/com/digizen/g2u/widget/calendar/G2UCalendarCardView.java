@@ -14,6 +14,7 @@ import com.jeek.calendar.widget.calendar.OnCalendarChangeListener;
 import com.jeek.calendar.widget.calendar.OnCalendarClickListener;
 import com.jeek.calendar.widget.calendar.month.MonthCalendarView;
 import com.jeek.calendar.widget.calendar.month.MonthView;
+import com.jeek.calendar.widget.calendar.schedule.event.DayEvent;
 import com.jeek.calendar.widget.calendar.schedule.event.Event;
 import com.jeek.calendar.widget.calendar.schedule.event.MonthEvent;
 import com.jeek.calendar.widget.calendar.schedule.event.YearEvent;
@@ -215,6 +216,11 @@ public class G2UCalendarCardView extends RelativeLayout {
         mCalendarView.setMonthEvent(year, monthEvent);
     }
 
+
+    public void setDayEvent(int year, int month, DayEvent dayEvent) {
+        mCalendarView.setDayEvent(year, month, dayEvent);
+    }
+
     /**
      * 清除所有event
      */
@@ -257,6 +263,18 @@ public class G2UCalendarCardView extends RelativeLayout {
         return mCalendarView.getEvents();
     }
 
+
+    public YearEvent getYearEventNotNull(int year) {
+        return mCalendarView.getYearEventNotNull(year);
+    }
+
+    public MonthEvent getMonthEventNotNull(int year, int month) {
+        return mCalendarView.getMonthEventNotNull(year, month);
+    }
+
+    public DayEvent getDayEventNotNull(int year, int month, int day) {
+        return mCalendarView.getDayEventNotNull(year, month, day);
+    }
 
     public void addOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
         mCalendarView.addOnPageChangeListener(listener);
