@@ -174,6 +174,15 @@
                     android:onClick="clickAddBlueEvent"
                     android:text="增加蓝色Event" />
             </LinearLayout>
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="clickAddMonthEvent"
+                android:text="增加整月Event" />
         </LinearLayout>
+
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

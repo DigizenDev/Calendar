@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,11 @@ import android.widget.TextView;
 
 import com.digizen.g2u.widget.calendar.G2UCalendarCardView;
 import com.jeek.calendar.R;
+import com.jeek.calendar.widget.calendar.CalendarUtils;
 import com.jeek.calendar.widget.calendar.OnCalendarChangeListener;
 import com.jeek.calendar.widget.calendar.schedule.event.DayEvent;
+import com.jeek.calendar.widget.calendar.schedule.event.Event;
+import com.jeek.calendar.widget.calendar.schedule.event.MonthEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -153,6 +157,31 @@ public class G2UActivity extends AppCompatActivity {
         calendar.clearAllEvent();
     }
 
+    public void clickAddMonthEvent(View v) {
+        MonthEvent monthEvent = new MonthEvent();
+        SparseArray<DayEvent> dayEvents = new SparseArray<>();
+        int year = calendar.getSelectYear();
+        int month = calendar.getSelectMonth();
+        int days = CalendarUtils.getMonthDays(year, month);
+        Random random=new Random();
+        for (int day = 1; day <= days; day++) {
+            DayEvent dayEvent = dayEvents.get(day);
+            if (dayEvent == null) {
+                dayEvent = new DayEvent(day, new ArrayList<Event>());
+                dayEvents.put(dayEvent.getDay(), dayEvent);
+            }
+            Calendar date = Calendar.getInstance();
+            date.set(Calendar.YEAR,year);
+            date.set(Calendar.MONTH,month);
+            date.set(Calendar.DAY_OF_MONTH,day);
+            for (int i = 0; i < random.nextInt(5)+1; i++) {
+                dayEvent.getEvents().add(new Event(date, Color.rgb(random.nextInt(255),random.nextInt(255),random.nextInt(255))));
+            }
+        }
+        monthEvent.setMonth(month);
+        monthEvent.setDayEvents(dayEvents);
+        calendar.setMonthEvent(year, monthEvent);
+    }
 
     public void clickAddRedEvent(View v) {
         int year = calendar.getSelectYear();

@@ -37,6 +37,7 @@ public class MonthView extends View {
     private static final int NUM_ROWS = 6;
     private static final int NUM_ROWS_MIN = 5;
     private static final int NOT_SELECTED_DAY = -1;//都不选中
+    private static final int MAX_DRAW_EVENT_COUNT = 2;//最多花2个颜色的event
     private Paint mPaint;
     private Paint mLunarPaint;
     private int mNormalDayColor;
@@ -572,6 +573,9 @@ public class MonthView extends View {
             }
             tmpColor = e.getColor();
             maxDrawCount++;
+            if (maxDrawCount >= MAX_DRAW_EVENT_COUNT) {
+                break;
+            }
         }
         return maxDrawCount;
     }
