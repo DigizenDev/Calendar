@@ -68,6 +68,7 @@ public class G2UActivity extends AppCompatActivity {
             }
 
         });
+        calendar.setCalendarToday();
         //calendar.clearEvent();
 
     }

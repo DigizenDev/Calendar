@@ -290,7 +290,12 @@ public class G2UCalendarCardView extends RelativeLayout {
 
 
     public void setCalendarToday() {
-        mCalendarView.setTodayToView();
-        mOffscreenPageLimit = INITIAL_OFFSCREEN_PAGE_LIMIT;
+        mCalendarView.post(new Runnable() {
+            @Override
+            public void run() {
+                mCalendarView.setTodayToView();
+                mOffscreenPageLimit = INITIAL_OFFSCREEN_PAGE_LIMIT;
+            }
+        });
     }
 }
