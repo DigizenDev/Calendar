@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.support.annotation.ColorInt;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.jeek.calendar.library.R;
@@ -15,10 +14,6 @@ import com.jeek.calendar.widget.calendar.schedule.event.Event;
 import com.jeek.calendar.widget.calendar.schedule.event.MonthEvent;
 import com.jeek.calendar.widget.calendar.schedule.event.YearEvent;
 
-import org.joda.time.DateTime;
-import org.joda.time.Months;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -365,31 +360,6 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
         }
         return dayEvent;
     }
-
-
-    /**
-     * 根据时间计算对应月的index
-     *
-     * @param year
-     * @param month
-     * @return
-     */
-    public int getDateItemIndex(int year, int month) {
-        int currentItem = getCurrentItem();
-        Calendar goalCalendar = Calendar.getInstance();
-        goalCalendar.set(Calendar.YEAR, year);
-        goalCalendar.set(Calendar.MONTH, month);
-
-        DateTime start = new DateTime(goalCalendar.getTimeInMillis());
-        DateTime end = new DateTime(getSelectDate().getTimeInMillis());
-        int months = Months.monthsBetween(start, end).getMonths();
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-        Log.d("------------->", format.format(goalCalendar.getTime()) + " " + format.format(getSelectDate().getTime()) + " " + months);
-        return 0;
-    }
-
 
     public Calendar getSelectDate() {
         Calendar calendar = Calendar.getInstance();

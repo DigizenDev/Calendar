@@ -74,8 +74,7 @@ public class G2UCalendarCardView extends RelativeLayout {
         findViewById(R.id.tv_calendar_today).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCalendarView.setTodayToView();
-                mOffscreenPageLimit = INITIAL_OFFSCREEN_PAGE_LIMIT;
+                setCalendarToday();
             }
         });
 
@@ -287,5 +286,11 @@ public class G2UCalendarCardView extends RelativeLayout {
 
     public void setAnimateEnd(boolean animateEnd) {
         mCalendarView.setAnimateEnd(animateEnd);
+    }
+
+
+    public void setCalendarToday() {
+        mCalendarView.setTodayToView();
+        mOffscreenPageLimit = INITIAL_OFFSCREEN_PAGE_LIMIT;
     }
 }

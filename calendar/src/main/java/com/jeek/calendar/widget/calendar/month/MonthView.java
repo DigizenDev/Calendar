@@ -10,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -280,7 +279,7 @@ public class MonthView extends View {
             int startY = (int) (mRowSize * row + mRowSize / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
             if (dayString.equals(String.valueOf(getSelectDay()))) {
                 //TODO 如果需要显示选中 才画圈
-                Log.d("---------->", mSelDay + "--" + getSelectDay());
+                //Log.d("---------->", mSelDay + "--" + getSelectDay());
                 if (mSelDay != NOT_SELECTED_DAY) {
                     int startRecX = mColumnSize * col;
                     int startRecY = mRowSize * row;
