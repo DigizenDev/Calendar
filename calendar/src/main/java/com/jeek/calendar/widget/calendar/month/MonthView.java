@@ -223,7 +223,7 @@ public class MonthView extends View {
         //mRowSize = getHeight() / NUM_ROWS;
         mRowSize = getHeight() / getSelectNumberRows();
         //mSelectCircleSize = (int) (mColumnSize / 3.2);
-        mSelectCircleSize = (int) (mColumnSize / 2.8);
+        mSelectCircleSize = (int) (mColumnSize / 2.6);
         while (mSelectCircleSize > mRowSize / 2) {
             mSelectCircleSize = (int) (mSelectCircleSize / 1.3);
         }

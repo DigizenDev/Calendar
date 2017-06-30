@@ -103,6 +103,7 @@
                             android:id="@+id/mcvCalendar"
                             android:layout_width="match_parent"
                             android:layout_height="251dp"
+                            android:paddingBottom="10dp"
                             android:overScrollMode="never"
                             app:auto_change_month_row="false"
                             app:month_day_lunar_text_size="8"
