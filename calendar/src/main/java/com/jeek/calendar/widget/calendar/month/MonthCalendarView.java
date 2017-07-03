@@ -109,10 +109,10 @@ public class MonthCalendarView extends ViewPager implements OnMonthClickListener
                 //Log.d("----------------->",monthView.getSelectMonth()+" "+monthView.getRealSelectDay()+" "+realSelectDay);
                 int selectYear = monthView.getSelectYear();
                 int selectMonth = monthView.getSelectMonth();
-                monthView.clickThisMonth(monthView.getSelectYear(), monthView.getSelectMonth(), realSelectDay);
                 if (mOnCalendarClickListener != null) {
                     mOnCalendarClickListener.onPageChange(selectYear, selectMonth, selectDay);
                 }
+                monthView.clickThisMonth(monthView.getSelectYear(), monthView.getSelectMonth(), realSelectDay);
             } else {
                 MonthCalendarView.this.postDelayed(new Runnable() {
                     @Override
