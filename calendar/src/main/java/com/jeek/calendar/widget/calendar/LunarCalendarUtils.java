@@ -399,5 +399,15 @@ public class LunarCalendarUtils {
     }
 
 
-
+    /**
+     *
+     * @param lunarYear 农历年份
+     * @return String of Ganzhi: 甲子年
+     * Tiangan:甲乙丙丁戊己庚辛壬癸<br/>Dizhi: 子丑寅卯辰巳无为申酉戌亥
+     */
+    public static String lunarYearToGanZhi(int lunarYear){
+        final String[] tianGan = {"甲","乙","丙","丁","戊","己","庚","辛","壬","癸"};
+        final String[] diZhi = {"子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"};
+        return tianGan[(lunarYear-4) % 10]+diZhi[(lunarYear-4) % 12]+"年";
+    }
 }

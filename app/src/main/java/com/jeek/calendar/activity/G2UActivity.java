@@ -18,7 +18,10 @@ import android.widget.TextView;
 import com.digizen.g2u.widget.calendar.G2UCalendarCardView;
 import com.jeek.calendar.R;
 import com.jeek.calendar.widget.calendar.CalendarUtils;
+import com.jeek.calendar.widget.calendar.LunarCalendarUtils;
 import com.jeek.calendar.widget.calendar.OnCalendarChangeListener;
+import com.jeek.calendar.widget.calendar.bean.Lunar;
+import com.jeek.calendar.widget.calendar.bean.Solar;
 import com.jeek.calendar.widget.calendar.schedule.event.DayEvent;
 import com.jeek.calendar.widget.calendar.schedule.event.Event;
 import com.jeek.calendar.widget.calendar.schedule.event.MonthEvent;
@@ -47,19 +50,22 @@ public class G2UActivity extends AppCompatActivity {
     G2UCalendarCardView calendar;
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private TextView textView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_g2u);
-
+        textView = (TextView) findViewById(R.id.tv_ganzhi);
         initView();
         //load();
         calendar.setOnCalendarChangeListener(new OnCalendarChangeListener() {
             @Override
             public void onClickDate(Calendar date, int year, int month, int day) {
+                Lunar lunar = LunarCalendarUtils.solarToLunar(new Solar(year, month, day));
+                String ganZhi = LunarCalendarUtils.lunarYearToGanZhi(lunar.lunarYear);
                 Log.d(G2UCalendarCardView.class.getSimpleName(), "onClickDate--->" + year + "-" + month + "-" + day + "----格式化时间-->" + new SimpleDateFormat("yyyy-MM-dd").format(date.getTime()) + "---真实--->" + calendar.getRealSelectDay());
-
+                textView.setText(ganZhi);
             }
 
             @Override
